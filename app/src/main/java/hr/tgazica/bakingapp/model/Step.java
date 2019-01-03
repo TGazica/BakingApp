@@ -1,4 +1,4 @@
-package hr.reroot.bakingapp.model;
+package hr.tgazica.bakingapp.model;
 
 public class Step {
 

@@ -1,7 +1,9 @@
-package hr.reroot.bakingapp;
+package hr.tgazica.bakingapp;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import hr.reroot.bakingapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
