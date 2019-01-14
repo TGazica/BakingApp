@@ -1,17 +1,19 @@
 package hr.tgazica.bakingapp.model;
 
-public class Ingredient {
+import java.io.Serializable;
+
+public class Ingredient implements Serializable {
 
     private double quantity;
-    private String measeure;
+    private String measure;
     private String ingredient;
 
     public Ingredient() {
     }
 
-    public Ingredient(double quantity, String measeure, String ingredient) {
+    public Ingredient(double quantity, String measure, String ingredient) {
         this.quantity = quantity;
-        this.measeure = measeure;
+        this.measure = measure;
         this.ingredient = ingredient;
     }
 
@@ -23,12 +25,12 @@ public class Ingredient {
         this.quantity = quantity;
     }
 
-    public String getMeaseure() {
-        return measeure;
+    public String getMeasure() {
+        return measure;
     }
 
-    public void setMeaseure(String measeure) {
-        this.measeure = measeure;
+    public void setMeasure(String measure) {
+        this.measure = measure;
     }
 
     public String getIngredient() {

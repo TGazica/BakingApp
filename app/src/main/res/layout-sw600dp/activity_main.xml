@@ -6,7 +6,7 @@
     tools:context=".ui.recipeList.RecipeListActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recipe_list_holder"
+        android:id="@+id/recipe_list_holder_tablet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

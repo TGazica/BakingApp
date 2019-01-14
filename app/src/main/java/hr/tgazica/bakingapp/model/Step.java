@@ -1,12 +1,15 @@
 package hr.tgazica.bakingapp.model;
 
-public class Step {
+import java.io.Serializable;
+
+public class Step implements Serializable {
 
     private int id;
     private String shortDescription;
     private String description;
     private String videoURL;
     private String thumbnailURL;
+    private boolean isSelected = false;
 
     public Step() {
     }
@@ -57,5 +60,13 @@ public class Step {
 
     public void setThumbnailURL(String thumbnailURL) {
         this.thumbnailURL = thumbnailURL;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }
