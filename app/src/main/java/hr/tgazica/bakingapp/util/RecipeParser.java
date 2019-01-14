@@ -1,4 +1,4 @@
-package hr.tgazica.bakingapp.Util;
+package hr.tgazica.bakingapp.util;
 
 import android.content.Context;
 

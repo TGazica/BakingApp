@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-import hr.tgazica.bakingapp.Util.RecipeParser;
+import hr.tgazica.bakingapp.util.RecipeParser;
 
 public class RecipesHolder {
 
