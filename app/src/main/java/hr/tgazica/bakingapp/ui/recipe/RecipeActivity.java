@@ -28,6 +28,7 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeClickLi
     FrameLayout recipeFragmentHolder;
 
     private Recipe recipe;
+    private Step step;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeClickLi
 
     @Override
     public void onRecipeStepClicked(Step step) {
-
+        this.step = step;
     }
 
     @Override

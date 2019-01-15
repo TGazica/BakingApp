@@ -3,4 +3,5 @@
     <string name="next_step_text">Next Step</string>
     <string name="previous_step_text">Previous step</string>
     <string name="steps_text">Steps</string>
+    <string name="ingredients">Ingredients:</string>
 </resources>
