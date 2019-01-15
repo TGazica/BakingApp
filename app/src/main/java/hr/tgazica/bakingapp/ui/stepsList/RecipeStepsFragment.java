@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import hr.tgazica.bakingapp.R;
 import hr.tgazica.bakingapp.model.Recipe;
 import hr.tgazica.bakingapp.ui.recipe.OnRecipeClickListener;
@@ -27,7 +26,6 @@ public class RecipeStepsFragment extends Fragment {
 
     private OnRecipeClickListener recipeClickListener;
     private Recipe recipe;
-    private StepAdapter stepAdapter;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -51,7 +49,7 @@ public class RecipeStepsFragment extends Fragment {
             recipe = (Recipe) getArguments().getSerializable(RecipeActivity.RECIPE_EXTRA);
         }
 
-        stepAdapter = new StepAdapter(recipeClickListener);
+        StepAdapter stepAdapter = new StepAdapter(recipeClickListener);
 
         stepsList.setLayoutManager(new LinearLayoutManager(getContext()));
         stepsList.setAdapter(stepAdapter);

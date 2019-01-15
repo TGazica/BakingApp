@@ -11,9 +11,10 @@ import butterknife.ButterKnife;
 import hr.tgazica.bakingapp.R;
 import hr.tgazica.bakingapp.model.Recipe;
 import hr.tgazica.bakingapp.model.Step;
+import hr.tgazica.bakingapp.ui.details.RecipeDetailsFragment;
 import hr.tgazica.bakingapp.ui.stepsList.RecipeStepsFragment;
 
-public class RecipeActivity extends AppCompatActivity implements OnRecipeClickListener{
+public class RecipeActivity extends AppCompatActivity implements OnRecipeClickListener {
 
     public static final String RECIPE_EXTRA = "recipe_extra";
 
@@ -29,6 +30,7 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeClickLi
 
     private Recipe recipe;
     private Step step;
+    private boolean isPhone;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,13 +40,15 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeClickLi
 
         Intent intent = getIntent();
 
-        if (intent.getSerializableExtra(RECIPE_EXTRA) != null){
+        if (intent.getSerializableExtra(RECIPE_EXTRA) != null) {
             recipe = (Recipe) intent.getSerializableExtra(RECIPE_EXTRA);
         }
 
-        if (recipeFragmentHolder!= null){
+        isPhone = recipeFragmentHolder != null;
+
+        if (isPhone) {
             initPhoneLayout();
-        }else {
+        } else {
             initTabletLayout();
         }
     }
@@ -71,6 +75,18 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeClickLi
     @Override
     public void onRecipeStepClicked(Step step) {
         this.step = step;
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(RECIPE_EXTRA, step);
+
+        RecipeDetailsFragment recipeDetailsFragment = new RecipeDetailsFragment();
+        recipeDetailsFragment.setArguments(bundle);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.recipe_fragment_holder, recipeDetailsFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
