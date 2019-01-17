@@ -1,22 +1,33 @@
 package hr.tgazica.bakingapp.ui.recipe;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import hr.tgazica.bakingapp.R;
 import hr.tgazica.bakingapp.model.Recipe;
 import hr.tgazica.bakingapp.model.Step;
-import hr.tgazica.bakingapp.ui.details.RecipeDetailsFragment;
-import hr.tgazica.bakingapp.ui.stepsList.RecipeStepsFragment;
+import hr.tgazica.bakingapp.ui.recipe.details.RecipeDetailsFragment;
+import hr.tgazica.bakingapp.ui.recipe.stepsList.RecipeStepsFragment;
 
-public class RecipeActivity extends AppCompatActivity implements OnRecipeClickListener {
+public class RecipeActivity extends AppCompatActivity implements OnRecipeListener {
 
     public static final String RECIPE_EXTRA = "recipe_extra";
+    public static final String STEP_EXTRA = "step_extra";
+
+    public static final String LIST_FRAGMENT = "list_fragment";
+
+    public static final String RECIPE_INSTANCE = "recipe_instance";
+    public static final String STEP_INSTANCE = "step_instance";
 
     @Nullable
     @BindView(R.id.recipe_navigation_holder)
@@ -27,6 +38,15 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeClickLi
     @Nullable
     @BindView(R.id.recipe_fragment_holder)
     FrameLayout recipeFragmentHolder;
+    @Nullable
+    @BindView(R.id.button_steps)
+    Button buttonSteps;
+    @Nullable
+    @BindView(R.id.button_next)
+    Button buttonNext;
+    @Nullable
+    @BindView(R.id.button_previous)
+    Button buttonPrevious;
 
     private Recipe recipe;
     private Step step;
@@ -38,18 +58,25 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeClickLi
         setContentView(R.layout.activity_recipe);
         ButterKnife.bind(this);
 
-        Intent intent = getIntent();
-
-        if (intent.getSerializableExtra(RECIPE_EXTRA) != null) {
-            recipe = (Recipe) intent.getSerializableExtra(RECIPE_EXTRA);
-        }
-
         isPhone = recipeFragmentHolder != null;
 
-        if (isPhone) {
-            initPhoneLayout();
-        } else {
-            initTabletLayout();
+        if (savedInstanceState == null) {
+
+            Intent intent = getIntent();
+
+            if (intent.getSerializableExtra(RECIPE_EXTRA) != null) {
+                recipe = (Recipe) intent.getSerializableExtra(RECIPE_EXTRA);
+            }
+
+            if (isPhone) {
+                initPhoneLayout();
+            } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                initTabletLayout();
+            }
+        }else {
+            recipe = (Recipe) savedInstanceState.getSerializable(RECIPE_INSTANCE);
+            step = (Step) savedInstanceState.getSerializable(STEP_INSTANCE);
         }
     }
 
@@ -63,44 +90,110 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeClickLi
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.recipe_fragment_holder, recipeStepsFragment)
-                .addToBackStack(null)
+                .replace(R.id.recipe_fragment_holder, recipeStepsFragment, LIST_FRAGMENT)
                 .commit();
     }
 
     private void initTabletLayout() {
-
-    }
-
-    @Override
-    public void onRecipeStepClicked(Step step) {
-        this.step = step;
+        RecipeStepsFragment recipeStepsFragment = new RecipeStepsFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(RECIPE_EXTRA, step);
+        bundle.putSerializable(RECIPE_EXTRA, recipe);
 
-        RecipeDetailsFragment recipeDetailsFragment = new RecipeDetailsFragment();
-        recipeDetailsFragment.setArguments(bundle);
+        recipeStepsFragment.setArguments(bundle);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.recipe_fragment_holder, recipeDetailsFragment)
+                .replace(R.id.recipe_navigation_holder, recipeStepsFragment)
                 .addToBackStack(null)
                 .commit();
     }
 
     @Override
+    public void onRecipeStepClicked(Step step) {
+        if (this.step == null || this.step.getId() != step.getId()) {
+            this.step = step;
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(RECIPE_EXTRA, recipe);
+            bundle.putSerializable(STEP_EXTRA, step);
+
+            RecipeDetailsFragment recipeDetailsFragment = new RecipeDetailsFragment();
+            recipeDetailsFragment.setArguments(bundle);
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(recipeFragmentHolder != null ? R.id.recipe_fragment_holder : R.id.recipe_details_holder, recipeDetailsFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onListFragmentResumed() {
+        if (recipeFragmentHolder != null) {
+            if (buttonSteps != null && buttonNext != null && buttonPrevious != null) {
+                buttonNext.setVisibility(View.GONE);
+                buttonPrevious.setVisibility(View.GONE);
+                buttonSteps.setVisibility(View.GONE);
+            }
+            step = null;
+        }
+    }
+
+    @Override
+    public void onDetailsFragmentResumed(boolean shouldButtonsShow) {
+        if (shouldButtonsShow) {
+            if (recipe.getSteps().get(0).getId() == step.getId()) {
+                if (buttonSteps != null && buttonNext != null && buttonPrevious != null) {
+                    buttonPrevious.setVisibility(View.GONE);
+                    buttonSteps.setVisibility(View.VISIBLE);
+                    buttonNext.setVisibility(View.VISIBLE);
+                }
+            } else if (recipe.getSteps().get(recipe.getSteps().size() - 1).getId() == step.getId()) {
+                if (buttonSteps != null && buttonNext != null && buttonPrevious != null) {
+                    buttonPrevious.setVisibility(View.VISIBLE);
+                    buttonSteps.setVisibility(View.VISIBLE);
+                    buttonNext.setVisibility(View.GONE);
+                }
+            } else {
+                if (buttonSteps != null && buttonNext != null && buttonPrevious != null) {
+                    buttonPrevious.setVisibility(View.VISIBLE);
+                    buttonSteps.setVisibility(View.VISIBLE);
+                    buttonNext.setVisibility(View.VISIBLE);
+                }
+            }
+        } else {
+            if (buttonSteps != null && buttonNext != null && buttonPrevious != null) {
+                buttonPrevious.setVisibility(View.GONE);
+                buttonSteps.setVisibility(View.GONE);
+                buttonNext.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @OnClick(R.id.button_previous)
     public void onPreviousStepClicked() {
-
+        int i = recipe.getSteps().indexOf(step);
+        onRecipeStepClicked(recipe.getSteps().get(i - 1));
     }
 
-    @Override
+    @OnClick(R.id.button_next)
     public void onNextStepClicked() {
+        int i = recipe.getSteps().indexOf(step);
+        onRecipeStepClicked(recipe.getSteps().get(i + 1));
+    }
 
+    @OnClick(R.id.button_steps)
+    public void onStepsButtonClicked() {
+        initPhoneLayout();
     }
 
     @Override
-    public void onStepsButtonClicked() {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
 
+        outState.putSerializable(RECIPE_INSTANCE, recipe);
+        outState.putSerializable(STEP_INSTANCE, step);
     }
 }

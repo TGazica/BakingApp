@@ -1,4 +1,4 @@
-package hr.tgazica.bakingapp.ui.stepsList.viewHolder;
+package hr.tgazica.bakingapp.ui.recipe.stepsList.viewHolder;
 
 import android.view.View;
 import android.widget.TextView;
@@ -11,21 +11,21 @@ import butterknife.OnClick;
 import hr.tgazica.bakingapp.R;
 import hr.tgazica.bakingapp.model.Recipe;
 import hr.tgazica.bakingapp.model.Step;
-import hr.tgazica.bakingapp.ui.recipe.OnRecipeClickListener;
+import hr.tgazica.bakingapp.ui.recipe.OnRecipeListener;
 
 public class StepViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.step_short_description)
     TextView stepShortDescription;
 
-    private OnRecipeClickListener clickListener;
+    private OnRecipeListener clickListener;
 
     public StepViewHolder(@NonNull View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void setClickListener(OnRecipeClickListener clickListener) {
+    public void setClickListener(OnRecipeListener clickListener) {
         this.clickListener = clickListener;
     }
 

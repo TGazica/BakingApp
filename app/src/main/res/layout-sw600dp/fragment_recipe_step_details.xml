@@ -15,8 +15,9 @@
 
             <com.google.android.exoplayer2.ui.PlayerView
                 android:id="@+id/video_player"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_gravity="center"
+                android:layout_width="640dp"
+                android:layout_height="320dp" />
 
             <TextView
                 android:id="@+id/recipe_step_description"

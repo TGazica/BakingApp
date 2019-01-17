@@ -1,7 +1,6 @@
-package hr.tgazica.bakingapp.ui.stepsList.adapter;
+package hr.tgazica.bakingapp.ui.recipe.stepsList.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -12,15 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import hr.tgazica.bakingapp.R;
 import hr.tgazica.bakingapp.model.Recipe;
 import hr.tgazica.bakingapp.model.Step;
-import hr.tgazica.bakingapp.ui.recipe.OnRecipeClickListener;
-import hr.tgazica.bakingapp.ui.stepsList.viewHolder.StepViewHolder;
+import hr.tgazica.bakingapp.ui.recipe.OnRecipeListener;
+import hr.tgazica.bakingapp.ui.recipe.stepsList.viewHolder.StepViewHolder;
 
 public class StepAdapter extends RecyclerView.Adapter<StepViewHolder> {
 
     List<Object> steps = new ArrayList<>();
-    private OnRecipeClickListener clickListener;
+    private OnRecipeListener clickListener;
 
-    public StepAdapter(OnRecipeClickListener clickListener) {
+    public StepAdapter(OnRecipeListener clickListener) {
         this.clickListener = clickListener;
     }
 

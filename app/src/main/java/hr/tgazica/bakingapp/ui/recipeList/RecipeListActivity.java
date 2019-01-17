@@ -1,6 +1,8 @@
 package hr.tgazica.bakingapp.ui.recipeList;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -45,6 +47,7 @@ public class RecipeListActivity extends AppCompatActivity implements OnRecipeLis
             recipeListHolder.setAdapter(recipeListAdapter);
         } else {
             if (recipeListHolderTablet != null) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 recipeListHolderTablet.setLayoutManager(new GridLayoutManager(this, 3));
                 recipeListHolderTablet.setAdapter(recipeListAdapter);
             }

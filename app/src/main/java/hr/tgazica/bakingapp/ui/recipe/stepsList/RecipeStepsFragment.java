@@ -1,4 +1,4 @@
-package hr.tgazica.bakingapp.ui.stepsList;
+package hr.tgazica.bakingapp.ui.recipe.stepsList;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,22 +15,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import hr.tgazica.bakingapp.R;
 import hr.tgazica.bakingapp.model.Recipe;
-import hr.tgazica.bakingapp.ui.recipe.OnRecipeClickListener;
+import hr.tgazica.bakingapp.ui.recipe.OnRecipeListener;
 import hr.tgazica.bakingapp.ui.recipe.RecipeActivity;
-import hr.tgazica.bakingapp.ui.stepsList.adapter.StepAdapter;
+import hr.tgazica.bakingapp.ui.recipe.stepsList.adapter.StepAdapter;
 
 public class RecipeStepsFragment extends Fragment {
 
     @BindView(R.id.steps_list)
     RecyclerView stepsList;
 
-    private OnRecipeClickListener recipeClickListener;
+    private OnRecipeListener recipeClickListener;
     private Recipe recipe;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        recipeClickListener = (OnRecipeClickListener) context;
+        recipeClickListener = (OnRecipeListener) context;
     }
 
     @Nullable
@@ -56,5 +56,11 @@ public class RecipeStepsFragment extends Fragment {
 
         stepAdapter.setSteps(recipe);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        recipeClickListener.onListFragmentResumed();
     }
 }
