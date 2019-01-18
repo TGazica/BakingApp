@@ -51,4 +51,10 @@ public class RecipeListViewHolder extends RecyclerView.ViewHolder {
         clickListener.onRecipeItemClicked(recipe);
     }
 
+    @OnClick(R.id.widget_button)
+    public void onwidgetButtonClicked(){
+        Recipe recipe = (Recipe) itemView.getTag();
+        clickListener.onSetWidget(recipe);
+    }
+
 }

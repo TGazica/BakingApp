@@ -1,5 +1,7 @@
 package hr.tgazica.bakingapp.ui.recipeList;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -18,6 +20,7 @@ import hr.tgazica.bakingapp.model.RecipesHolder;
 import hr.tgazica.bakingapp.ui.recipe.RecipeActivity;
 import hr.tgazica.bakingapp.ui.recipeList.adapter.RecipeListAdapter;
 import hr.tgazica.bakingapp.ui.recipeList.listener.OnRecipeListClickListener;
+import hr.tgazica.bakingapp.ui.widget.RecipeWidget;
 
 public class RecipeListActivity extends AppCompatActivity implements OnRecipeListClickListener {
 
@@ -61,5 +64,19 @@ public class RecipeListActivity extends AppCompatActivity implements OnRecipeLis
         Intent intent = new Intent(this, RecipeActivity.class);
         intent.putExtra(RecipeActivity.RECIPE_EXTRA, recipe);
         startActivity(intent);
+    }
+
+    @Override
+    public void onSetWidget(Recipe recipe) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(recipe.getName()).append("\n");
+        for (int i = 0; i < recipe.getIngredients().size(); i++) {
+            if (i != recipe.getIngredients().size() - 1) {
+                stringBuilder.append("  -").append(recipe.getIngredients().get(i).getIngredient()).append(", qty: ").append(recipe.getIngredients().get(i).getQuantity()).append(" ").append(recipe.getIngredients().get(i).getMeasure()).append("\n");
+            }
+        }
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgets = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidget.class));
+        RecipeWidget.setRecipeIngredients(this,appWidgetManager, appWidgets, stringBuilder.toString());
     }
 }

@@ -6,4 +6,6 @@ public interface OnRecipeListClickListener {
 
     void onRecipeItemClicked(Recipe recipe);
 
+    void onSetWidget(Recipe recipe);
+
 }

@@ -3,12 +3,14 @@ package hr.tgazica.bakingapp.ui.recipe;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +61,7 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeListene
         ButterKnife.bind(this);
 
         isPhone = recipeFragmentHolder != null;
+        initToolbar();
 
         if (savedInstanceState == null) {
 
@@ -77,6 +80,25 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeListene
         }else {
             recipe = (Recipe) savedInstanceState.getSerializable(RECIPE_INSTANCE);
             step = (Step) savedInstanceState.getSerializable(STEP_INSTANCE);
+        }
+    }
+
+    private void initToolbar(){
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    public boolean onOptionsItemSelected(final MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

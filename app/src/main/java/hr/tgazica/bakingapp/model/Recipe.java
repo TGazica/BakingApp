@@ -11,6 +11,7 @@ public class Recipe implements Serializable {
     private List<Step> steps;
     private int servings;
     private String image;
+    private boolean isInWidget = false;
 
     public Recipe() {
     }
@@ -70,5 +71,13 @@ public class Recipe implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public boolean isInWidget() {
+        return isInWidget;
+    }
+
+    public void setInWidget(boolean inWidget) {
+        isInWidget = inWidget;
     }
 }
