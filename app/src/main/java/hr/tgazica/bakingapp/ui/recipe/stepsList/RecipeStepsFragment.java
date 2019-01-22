@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,8 @@ public class RecipeStepsFragment extends Fragment {
 
     @BindView(R.id.steps_list)
     RecyclerView stepsList;
+    @BindView(R.id.steps_recipe_name)
+    TextView stepsRecipeName;
 
     private OnRecipeListener recipeClickListener;
     private Recipe recipe;
@@ -45,8 +48,12 @@ public class RecipeStepsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null){
+        if (getArguments() != null) {
             recipe = (Recipe) getArguments().getSerializable(RecipeActivity.RECIPE_EXTRA);
+            if (recipe != null && recipe.getName() != null){
+                stepsRecipeName.setText(recipe.getName());
+
+            }
         }
 
         StepAdapter stepAdapter = new StepAdapter(recipeClickListener);
