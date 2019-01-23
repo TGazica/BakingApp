@@ -5,6 +5,9 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import hr.tgazica.bakingapp.App;
 import hr.tgazica.bakingapp.R;
 import hr.tgazica.bakingapp.model.Recipe;
 import hr.tgazica.bakingapp.model.RecipesHolder;
@@ -21,7 +25,7 @@ import hr.tgazica.bakingapp.ui.recipeList.adapter.RecipeListAdapter;
 import hr.tgazica.bakingapp.ui.recipeList.listener.OnRecipeListClickListener;
 import hr.tgazica.bakingapp.ui.widget.RecipeWidget;
 
-public class RecipeListActivity extends AppCompatActivity implements OnRecipeListClickListener {
+public class RecipeListActivity extends AppCompatActivity implements OnRecipeListClickListener, RecipesHolder.OnDataReadyListener {
 
     @Nullable
     @BindView(R.id.recipe_list_holder)
@@ -40,8 +44,6 @@ public class RecipeListActivity extends AppCompatActivity implements OnRecipeLis
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        recipesHolder = RecipesHolder.getInstance(this);
-
         recipeListAdapter = new RecipeListAdapter(this);
 
         if (recipeListHolder != null) {
@@ -54,8 +56,23 @@ public class RecipeListActivity extends AppCompatActivity implements OnRecipeLis
                 recipeListHolderTablet.setAdapter(recipeListAdapter);
             }
         }
+    }
 
-        recipeListAdapter.setRecipes(recipesHolder.getRecipes());
+    @Override
+    protected void onResume() {
+        super.onResume();
+        recipesHolder = RecipesHolder.getInstance(this, App.getApiInteractor());
+        recipesHolder.setListener(this);
+    }
+
+    @Override
+    public void OnDataReady(List<Recipe> recipes) {
+        recipeListAdapter.setRecipes(recipes);
+    }
+
+    @Override
+    public void onDataFailed() {
+        Toast.makeText(this, getString(R.string.no_data_text), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -77,5 +94,11 @@ public class RecipeListActivity extends AppCompatActivity implements OnRecipeLis
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgets = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidget.class));
         RecipeWidget.setRecipeIngredients(this,appWidgetManager, appWidgets, stringBuilder.toString());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        recipesHolder.removeListener();
     }
 }

@@ -10,10 +10,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -38,6 +40,7 @@ public class RecipeDetailsFragment extends Fragment {
     private static final String RECIPE_SAVE = "recipe_save";
     private static final String STEP_SAVE = "step_save";
     private static final String PLAYBACK_SAVE = "playback_save";
+    private static final String IS_PLAYING_SAVE = "is_playing";
 
     @BindView(R.id.video_player)
     PlayerView videoPlayer;
@@ -77,11 +80,22 @@ public class RecipeDetailsFragment extends Fragment {
             recipe = (Recipe) savedInstanceState.getSerializable(RECIPE_SAVE);
             playbackPosition = savedInstanceState.getLong(PLAYBACK_SAVE);
             step = (Step) savedInstanceState.getSerializable(STEP_SAVE);
+            playWhenReady = savedInstanceState.getBoolean(IS_PLAYING_SAVE);
         }else {
             if (getArguments() != null) {
                 step = (Step) getArguments().getSerializable(RecipeActivity.STEP_EXTRA);
                 recipe = (Recipe) getArguments().getSerializable(RecipeActivity.RECIPE_EXTRA);
             }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (recipeDetailsLand == null) {
+            recipeListener.onDetailsFragmentResumed(true);
+        }else {
+            recipeListener.onDetailsFragmentResumed(false);
         }
 
         if (step != null) {
@@ -106,16 +120,6 @@ public class RecipeDetailsFragment extends Fragment {
                 recipeStepDescription.setText(step.getDescription());
             }
 
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (recipeDetailsLand == null) {
-            recipeListener.onDetailsFragmentResumed(true);
-        }else {
-            recipeListener.onDetailsFragmentResumed(false);
         }
     }
 
@@ -156,6 +160,9 @@ public class RecipeDetailsFragment extends Fragment {
         outState.putSerializable(STEP_SAVE, step);
         outState.putSerializable(RECIPE_SAVE, recipe);
         outState.putLong(PLAYBACK_SAVE, playbackPosition);
+        if (player != null) {
+            outState.putBoolean(IS_PLAYING_SAVE, player.getPlayWhenReady());
+        }
     }
 
     private void releasePlayer() {
