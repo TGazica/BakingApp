@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +40,12 @@ public class StepViewHolder extends RecyclerView.ViewHolder {
         stepShortDescription.setText(step.getShortDescription());
         if (!step.getThumbnailURL().equals("")){
             Glide.with(itemView).load(step.getThumbnailURL()).into(thumbnail);
+        }else {
+            if (step.getVideoURL().equals("")) {
+                thumbnail.setImageResource(R.drawable.ic_baseline_info_24px);
+            }else {
+                thumbnail.setImageResource(R.drawable.ic_baseline_ondemand_video_24px);
+            }
         }
     }
 
