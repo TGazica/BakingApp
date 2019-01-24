@@ -1,7 +1,10 @@
 package hr.tgazica.bakingapp.ui.recipe.stepsList.viewHolder;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +20,8 @@ public class StepViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.step_short_description)
     TextView stepShortDescription;
+    @BindView(R.id.thumbnail)
+    ImageView thumbnail;
 
     private OnRecipeListener clickListener;
 
@@ -32,6 +37,9 @@ public class StepViewHolder extends RecyclerView.ViewHolder {
     public void setStep(Step step) {
         itemView.setTag(step);
         stepShortDescription.setText(step.getShortDescription());
+        if (!step.getThumbnailURL().equals("")){
+            Glide.with(itemView).load(step.getThumbnailURL()).into(thumbnail);
+        }
     }
 
     public void setIngredientsList(Recipe recipe) {

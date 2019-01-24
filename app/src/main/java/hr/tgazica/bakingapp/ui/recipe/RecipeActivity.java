@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 import hr.tgazica.bakingapp.R;
 import hr.tgazica.bakingapp.model.Recipe;
 import hr.tgazica.bakingapp.model.Step;
@@ -127,7 +128,6 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeListene
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.recipe_navigation_holder, recipeStepsFragment)
-                .addToBackStack(null)
                 .commit();
     }
 
@@ -194,18 +194,21 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeListene
         }
     }
 
+    @Optional
     @OnClick(R.id.button_previous)
     public void onPreviousStepClicked() {
         int i = recipe.getSteps().indexOf(step);
         onRecipeStepClicked(recipe.getSteps().get(i - 1));
     }
 
+    @Optional
     @OnClick(R.id.button_next)
     public void onNextStepClicked() {
         int i = recipe.getSteps().indexOf(step);
         onRecipeStepClicked(recipe.getSteps().get(i + 1));
     }
 
+    @Optional
     @OnClick(R.id.button_steps)
     public void onStepsButtonClicked() {
         initPhoneLayout();
