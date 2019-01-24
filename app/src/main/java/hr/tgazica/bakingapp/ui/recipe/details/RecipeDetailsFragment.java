@@ -57,6 +57,7 @@ public class RecipeDetailsFragment extends Fragment {
     private long playbackPosition = 0;
     private boolean playWhenReady = true;
     private OnRecipeListener recipeListener;
+    private boolean isTablet;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -81,10 +82,12 @@ public class RecipeDetailsFragment extends Fragment {
             playbackPosition = savedInstanceState.getLong(PLAYBACK_SAVE);
             step = (Step) savedInstanceState.getSerializable(STEP_SAVE);
             playWhenReady = savedInstanceState.getBoolean(IS_PLAYING_SAVE);
-        }else {
+            isTablet = savedInstanceState.getBoolean(RecipeActivity.IS_TABLET);
+        } else {
             if (getArguments() != null) {
                 step = (Step) getArguments().getSerializable(RecipeActivity.STEP_EXTRA);
                 recipe = (Recipe) getArguments().getSerializable(RecipeActivity.RECIPE_EXTRA);
+                isTablet = getArguments().getBoolean(RecipeActivity.IS_TABLET);
             }
         }
     }
@@ -94,7 +97,7 @@ public class RecipeDetailsFragment extends Fragment {
         super.onResume();
         if (recipeDetailsLand == null) {
             recipeListener.onDetailsFragmentResumed(true);
-        }else {
+        } else {
             recipeListener.onDetailsFragmentResumed(false);
         }
 
@@ -104,14 +107,18 @@ public class RecipeDetailsFragment extends Fragment {
             } else {
                 initializePlayer();
 
-                if (recipeDetailsLand != null){
+                if (recipeDetailsLand != null) {
                     if (getActivity() != null) {
                         AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
                         if (appCompatActivity.getSupportActionBar() != null) {
-                            appCompatActivity.getSupportActionBar().hide();
+                            if (!isTablet) {
+                                appCompatActivity.getSupportActionBar().hide();
+                            }
                         }
-                        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                        if (!isTablet) {
+                            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                        }
                     }
                 }
             }
@@ -160,6 +167,7 @@ public class RecipeDetailsFragment extends Fragment {
         outState.putSerializable(STEP_SAVE, step);
         outState.putSerializable(RECIPE_SAVE, recipe);
         outState.putLong(PLAYBACK_SAVE, playbackPosition);
+        outState.putBoolean(RecipeActivity.IS_TABLET, isTablet);
         if (player != null) {
             outState.putBoolean(IS_PLAYING_SAVE, player.getPlayWhenReady());
         }

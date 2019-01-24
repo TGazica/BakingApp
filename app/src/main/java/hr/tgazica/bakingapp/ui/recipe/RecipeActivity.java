@@ -26,6 +26,7 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeListene
 
     public static final String RECIPE_EXTRA = "recipe_extra";
     public static final String STEP_EXTRA = "step_extra";
+    public static final String IS_TABLET = "is_tablet";
 
     public static final String LIST_FRAGMENT = "list_fragment";
 
@@ -139,6 +140,7 @@ public class RecipeActivity extends AppCompatActivity implements OnRecipeListene
             Bundle bundle = new Bundle();
             bundle.putSerializable(RECIPE_EXTRA, recipe);
             bundle.putSerializable(STEP_EXTRA, step);
+            bundle.putBoolean(IS_TABLET, !isPhone);
 
             RecipeDetailsFragment recipeDetailsFragment = new RecipeDetailsFragment();
             recipeDetailsFragment.setArguments(bundle);
